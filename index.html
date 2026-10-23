@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>📋 Tax Pulse | Complete W-2 Audit & Filing Studio</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="app-container">
+        <!-- Header -->
+        <header class="dashboard-header">
+            <div class="brand">
+                <i class="fa-solid fa-file-shield logo-icon"></i>
+                <div>
+                    <h1>Tax Pulse Studio by Ramin</h1>
+                    <span class="subtitle">Complete W-2 & Investment Tax Filing Estimator</span>
+                </div>
+            </div>
+        </header>
+
+        <main class="calculator-grid">
+            <!-- Left Inputs Panel (Full W-2 Form Mapping) -->
+            <section class="panel-card">
+                <h2><i class="fa-solid fa-sliders"></i> Filing Parameters</h2>
+                <div class="form-group">
+                    <label for="filing-status">Filing Status</label>
+                    <select id="filing-status" oninput="calculateTaxFiling()">
+                        <option value="single">Single</option>
+                        <option value="joint">Married Filing Jointly</option>
+                    </select>
+                </div>
+
+                <h2><i class="fa-solid fa-file-invoice"></i> Federal W-2 Inputs</h2>
+                
+                <div class="form-group">
+                    <label for="w2-box1">Box 1: Taxable Wages, Tips, Compensation ($)</label>
+                    <input type="number" id="w2-box1" value="67000" oninput="calculateTaxFiling()">
+                </div>
+
+                <div class="form-group">
+                    <label for="w2-box2">Box 2: Federal Income Tax Withheld ($)</label>
+                    <input type="number" id="w2-box2" value="6200" oninput="calculateTaxFiling()">
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="w2-box3">Box 3: Social Security Wages ($)</label>
+                        <input type="number" id="w2-box3" value="67000" oninput="calculateTaxFiling()">
+                    </div>
+                    <div class="form-group">
+                        <label for="w2-box4">Box 4: Social Security Withheld ($)</label>
+                        <input type="number" id="w2-box4" value="4154" oninput="calculateTaxFiling()">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="w2-box5">Box 5: Medicare Wages ($)</label>
+                        <input type="number" id="w2-box5" value="67000" oninput="calculateTaxFiling()">
+                    </div>
+                    <div class="form-group">
+                        <label for="w2-box6">Box 6: Medicare Withheld ($)</label>
+                        <input type="number" id="w2-box6" value="971.50" oninput="calculateTaxFiling()">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="investment-income">1099 Dividends / Interest (FXAIX, SPAXX, etc.) ($)</label>
+                    <input type="number" id="investment-income" value="500" oninput="calculateTaxFiling()">
+                </div>
+
+                <h2><i class="fa-solid fa-map-location-dot"></i> State & Local W-2 Inputs (MD / Montgomery Co.)</h2>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="w2-box16">Box 16: State Wages ($)</label>
+                        <input type="number" id="w2-box16" value="67000" oninput="calculateTaxFiling()">
+                    </div>
+                    <div class="form-group">
+                        <label for="w2-box17">Box 17: State Income Tax Withheld ($)</label>
+                        <input type="number" id="w2-box17" value="2500" oninput="calculateTaxFiling()">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="w2-box18">Box 18: Local Wages ($)</label>
+                        <input type="number" id="w2-box18" value="67000" oninput="calculateTaxFiling()">
+                    </div>
+                    <div class="form-group">
+                        <label for="w2-box19">Box 19: Local Tax Withheld (Montgomery Co.) ($)</label>
+                        <input type="number" id="w2-box19" value="2100" oninput="calculateTaxFiling()">
+                    </div>
+                </div>
+            </section>
+
+            <!-- Right Results Panel -->
+            <section class="panel-card results-card">
+                <h2><i class="fa-solid = fa-calculator"></i> April Bottom Line</h2>
+
+                <div id="refund-status-card" class="result-highlight refund-positive">
+                    <span id="status-title" class="highlight-label">ESTIMATED TOTAL REFUND</span>
+                    <span id="final-balance-val" class="highlight-value">+$0.00</span>
+                    <span id="status-subtext" class="status-subtext">You overpaid your taxes throughout the year.</span>
+                </div>
+
+                <div class="breakdown-list">
+                    <div class="breakdown-row">
+                        <span>Total Income (Box 1 + Dividends)</span>
+                        <span id="total-gross-val">$0.00</span>
+                    </div>
+                    <div class="breakdown-row">
+                        <span>Federal Standard Deduction</span>
+                        <span id="fed-deduction-val">$0.00</span>
+                    </div>
+
+                    <div class="divider"></div>
+
+                    <div class="breakdown-row">
+                        <span>Federal Tax Owed vs Withheld</span>
+                        <span id="fed-diff-val">$0.00</span>
+                    </div>
+                    <div class="breakdown-row">
+                        <span>MD State Tax Owed vs Withheld</span>
+                        <span id="state-diff-val">$0.00</span>
+                    </div>
+                    <div class="breakdown-row">
+                        <span>Montgomery County Owed vs Withheld</span>
+                        <span id="county-diff-val">$0.00</span>
+                    </div>
+
+                    <div class="divider"></div>
+
+                    <div class="breakdown-row">
+                        <span>FICA (Social Security & Medicare Paid)</span>
+                        <span id="fica-paid-val">$0.00</span>
+                    </div>
+                    <div class="breakdown-row total-row">
+                        <span>Total Federal/State/Local Tax Liability</span>
+                        <span id="total-liability-val">$0.00</span>
+                    </div>
+                    <div class="breakdown-row total-row">
+                        <span>Total Income Tax Withheld (Paid Ahead)</span>
+                        <span id="total-withheld-val">$0.00</span>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
